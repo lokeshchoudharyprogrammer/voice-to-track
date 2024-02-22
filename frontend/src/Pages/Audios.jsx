@@ -20,14 +20,12 @@ export const Audios = () => {
     const timer = setTimeout(() => {
       setShowTranscript(true);
     }, 1000);
-
-    // Clear the timer if component unmounts
     return () => clearTimeout(timer);
   }, []);
 
   const fetchAudioFiles = async () => {
     try {
-      const response = await fetch('http://localhost:5000/getAllAudio');
+      const response = await fetch('https://calm-cyan-rattlesnake-hose.cyclic.app/getAllAudio');
       const data = await response.json();
       setAudioFiles(data);
     } catch (error) {
@@ -35,7 +33,7 @@ export const Audios = () => {
     }
   };
   const getTranscript = (filename) => {
-    fetch(`http://localhost:5000/getTranscript/${filename}`).then((res) => {
+    fetch(`https://calm-cyan-rattlesnake-hose.cyclic.app/getTranscript/${filename}`).then((res) => {
       return res.json()
     }).then((res) => {
       settranscript(res.translation)
@@ -45,7 +43,7 @@ export const Audios = () => {
   }
   const renderAudioPlayers = () => {
     return audioFiles.map((filename, index) => (
-      <div key={index}>
+      <div key={index} style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding: "12px", borderRadius: "12px", border: "2px solid " }}>
         <span style={{
           display: "flex", gap: "12px", padding: "12px"
         }}>
@@ -54,14 +52,13 @@ export const Audios = () => {
 
         </span>
         <audio controls>
-          <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/ogg" />
-          <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/mpeg" />
-          Your browser does not support the audio element.
+          <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/ogg" />
+          <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/mpeg" />
         </audio>
       </div>
     ));
   };
-  console.log(transcript)
+
 
   return (
     <>
@@ -92,12 +89,10 @@ export const Audios = () => {
               <div>No transcript available</div>
             )}
           </ModalBody>
-
           <ModalFooter>
             <Button colorScheme='blue' mr={3} onClick={onClose}>
               Close
             </Button>
-
           </ModalFooter>
         </ModalContent>
       </Modal>

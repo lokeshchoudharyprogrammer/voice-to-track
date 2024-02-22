@@ -36,7 +36,7 @@ export default function RecordUi({
       audioRef.current.src = data.url;
     }
   }, [data.url]);
- 
+
   const uploadAudio = async () => {
     if (!data.blob) {
       console.log('No recorded data to upload.');
@@ -56,12 +56,12 @@ export default function RecordUi({
     });
 
     if (!response.ok) {
-      const errorMessage = await response.text(); // Get error message as text
+      const errorMessage = await response.text();
       console.log('Upload failed:', errorMessage);
-      // Handle error condition if needed
+
       return;
     }
-   
+
     if (response.status === 200) {
 
       toast({
