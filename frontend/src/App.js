@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useState } from "react";
+import Recorder from "voice-recorder-react";
+import RecordUi from "./Pages/RecordUi";
+import { Audios } from "./Pages/Audios";
+import NavBar from "./Pages/NavBar";
+import { Heading } from '@chakra-ui/react'
+export default function App() {
+  const [isHooks, setHooks] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <NavBar />
+ 
+ 
+      <br />
+      <br />
+      <br />
+      {isHooks ? (
+        <>
+          <Heading>Using React Hooks</Heading>
+        </>
+      ) : (
+        <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+          <Heading>Record Your Voice </Heading>
+          <br/>
+          <br/>
+          <Recorder Render={RecordUi} />
+        </div>
+      )}
+      <Audios />
+    </>
   );
 }
-
-export default App;
