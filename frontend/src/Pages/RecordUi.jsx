@@ -42,7 +42,7 @@ export default function RecordUi({
       return;
     }
 
-    console.log('Uploading audio:', data.blob);
+   
 
     const formData = new FormData();
     formData.append('audio', data.blob, 'recording.wav');
@@ -55,8 +55,7 @@ export default function RecordUi({
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      console.log('Upload failed:', errorMessage);
-
+   
       return;
     }
 

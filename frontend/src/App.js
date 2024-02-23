@@ -9,7 +9,6 @@ export default function App() {
   return (
     <>
       <NavBar />
-
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column", marginTop: "45px" }}>
         <Heading>Record Your Voice </Heading>
         <Spacer />

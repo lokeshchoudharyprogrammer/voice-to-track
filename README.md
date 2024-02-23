@@ -1,4 +1,5 @@
 # voice-to-track
+
 Sure, here is a markdown (.md) file containing the entire project code:
 
 # Audio Transcription Project
@@ -8,25 +9,34 @@ This project is an example of a Node.js server that allows users to upload audio
 ## Prerequisites
 
 Make sure you have the following installed:
+
 - Node.js
-- npm (Node Package Manager)
+- MongoDb
+- Express.js
+- Openai
+- Aws-sdk
 - ffmpeg (for audio conversion)
 
 ## Installation
 
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/your-username/audio-transcription-project.git
+   git clone https://github.com/lokeshchoudharyprogrammer/voice-to-track.git
    cd audio-transcription-project
+   cd backend
+   cd frontend
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Set up environment variables:
    Create a `.env` file in the root directory with the following:
+
    ```
    OPENAI_API_KEY=your_openai_api_key
    AWS_ACCESS_KEY_ID=your_aws_access_key_id
@@ -36,16 +46,12 @@ Make sure you have the following installed:
 
 4. Run the server:
    ```bash
-   npm start
+     nodemon index.js
    ```
-
-## Project Structure
-
-- `uploads/`: Folder to store uploaded audio files
-- `temp/`: Folder to store temporary files
-- `converted/`: Folder to store converted audio files
-- `src/`
-  - `app.js`: Main application file
+4. Run the frontend:
+   ```bash
+     npm run start
+   ```
 
 ## Dependencies
 
@@ -79,11 +85,13 @@ Make sure you have the following installed:
 ## Example Usage
 
 1. Upload an audio file:
+
    ```bash
    curl -X POST -F "audio=@path/to/audiofile.mp3" http://localhost:5000/upload
    ```
 
 2. Get transcript for an audio file:
+
    ```bash
    curl http://localhost:5000/getTranscript/filename.mp3
    ```
@@ -99,4 +107,3 @@ Make sure you have the following installed:
 - Adjust the AWS S3 bucket name and region in the `.env` file (`AWS_BUCKET_NAME`, `AWS_REGION`).
 - Replace `your_openai_api_key` with your actual OpenAI API key.
 - This is a basic example and may require further configuration and error handling for production use.
-
