@@ -91,7 +91,8 @@ app.get('/getRecording', async (req, res) => {
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 // Specify a writable directory for temporary files
-const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
+// const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
+const tempDir = path.join(__dirname, 'temp'); // Will create 'temp' in the same directory as index.js
 
 app.get('/getTranscript/:filename', async (req, res) => {
     const filename = req.params.filename;
