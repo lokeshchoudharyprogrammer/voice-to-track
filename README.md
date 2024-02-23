@@ -1,6 +1,5 @@
 # voice-to-track
 
-Sure, here is a markdown (.md) file containing the entire project code:
 
 # Audio Transcription Project
 
