@@ -36,14 +36,15 @@ export const Audios = () => {
     }
   };
   const getTranscript = (filename) => {
-    fetch(`https://calm-cyan-rattlesnake-hose.cyclic.app/getTranscript/${filename}`).then((res) => {
+    fetch(`http://localhost:5000/getTranscript/${filename}`).then((res) => {
       return res.json()
     }).then((res) => {
-      settranscript(res.translation)
+      settranscript(res.transcript)
       setShowTranscript(false)
     })
 
   }
+  // console.log(transcript)
   const renderAudioPlayers = () => {
 
     return audioFiles.length > 0 ?
@@ -53,7 +54,7 @@ export const Audios = () => {
             display: "flex", gap: "12px", padding: "12px"
           }}>
             {filename}
-            {/* <Button disabled={true} onClick={() => { getTranscript(filename); onOpen(); }} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'> Get Transcript </Button> */}
+            <Button  onClick={() => { getTranscript(filename); onOpen(); }}  colorScheme='blue'> Get Transcript </Button> 
             <a href={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} download="audio.mp3">
               <Button style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'>
                 <FaCloudDownloadAlt />

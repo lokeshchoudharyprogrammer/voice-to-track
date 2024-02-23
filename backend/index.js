@@ -7,6 +7,7 @@ const app = express();
 const fs = require("fs");
 const AWS = require('aws-sdk');
 const ffmpeg = require('fluent-ffmpeg');
+
 const OpenAI = require("openai");
 require('dotenv').config()
 const openai = new OpenAI({ apiKey: process.env.API_KEY });
@@ -19,6 +20,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+ffmpeg.setFfmpegPath(ffmpegPath);
 mongoose.connect("mongodb+srv://lokesh:lokeshcz@cluster0.dsoakmx.mongodb.net/AudioRecoding?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -85,7 +88,6 @@ app.get('/getRecording', async (req, res) => {
 app.get('/getTranscript/:filename', async (req, res) => {
     const filename = req.params.filename;
     try {
-
         const s3Params = {
             Bucket: 'cyclic-calm-cyan-rattlesnake-hose-ap-south-1',
             Key: filename,
@@ -94,7 +96,6 @@ app.get('/getTranscript/:filename', async (req, res) => {
         const s3Object = await s3.getObject(s3Params).promise();
         const tempFilePath = `temp_${filename}`;
         fs.writeFileSync(tempFilePath, s3Object.Body);
-
 
         const outputFilePath = `converted_${filename}.wav`;
         await new Promise((resolve, reject) => {
@@ -111,16 +112,16 @@ app.get('/getTranscript/:filename', async (req, res) => {
             file: audioStream,
             response_format: "text"
         });
+
         fs.unlinkSync(tempFilePath);
         fs.unlinkSync(outputFilePath);
 
-        res.send({ transcript: transcription.text });
+        res.send({ transcript: transcription });
     } catch (error) {
         console.error('Error fetching and transcribing audio:', error);
         res.status(500).send('Error fetching and transcribing audio.');
     }
 });
-
 
 app.get('/getAudio/:filename', async (req, res) => {
     const filename = req.params.filename;
