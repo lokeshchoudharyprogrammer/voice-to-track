@@ -90,9 +90,7 @@ app.get('/getRecording', async (req, res) => {
 });
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-// Specify a writable directory for temporary files
-// const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
-const tempDir =  '/tmp';; // Will create 'temp' in the same directory as index.js
+const tempDir =  '/tmp';
 
 app.get('/getTranscript/:filename', async (req, res) => {
     const filename = req.params.filename;
@@ -104,38 +102,37 @@ app.get('/getTranscript/:filename', async (req, res) => {
 
         const s3Object = await s3.getObject(s3Params).promise();
 
-        // Create temporary directory if it doesn't exist
+       
         if (!fs.existsSync(tempDir)) {
             fs.mkdirSync(tempDir, { recursive: true });
         }
 
-        const tempFilePath = `${tempDir}/temp_${filename}`;
-        fs.writeFileSync(tempFilePath, s3Object.Body);
+        const tempfiles = `${tempDir}/temp_${filename}`;
+        fs.writeFileSync(tempfiles, s3Object.Body);
 
-        const outputFilePath = `${tempDir}/converted_${filename}.wav`;
+        const new_output_file = `${tempDir}/converted_${filename}.wav`;
         await new Promise((resolve, reject) => {
-            ffmpeg(tempFilePath)
+            ffmpeg(tempfiles)
                 .toFormat('wav')
                 .on('end', () => resolve())
                 .on('error', (err) => reject(err))
-                .save(outputFilePath);
+                .save(new_output_file);
         });
 
-        const audioStream = fs.createReadStream(outputFilePath);
+        const audioStream = fs.createReadStream(new_output_file);
         const transcription = await openai.audio.transcriptions.create({
             model: "whisper-1",
             file: audioStream,
             response_format: "text"
         });
 
-        // Clean up temporary files
-        fs.unlinkSync(tempFilePath);
-        fs.unlinkSync(outputFilePath);
+        fs.unlinkSync(tempfiles);
+        fs.unlinkSync(new_output_file);
 
         res.send({ transcript: transcription });
     } catch (error) {
-        console.error('Error fetching and transcribing audio:', error);
-        res.status(500).send('Error fetching and transcribing audio.');
+        console.error('Error', error);
+        res.status(500).send('Errortranscribing audio.');
     }
 });
 
