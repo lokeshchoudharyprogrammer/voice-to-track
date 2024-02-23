@@ -93,7 +93,7 @@ export const Audios = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Transcription </ModalHeader>
+          <ModalHeader>Transcription Wait for few Second</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {showTranscript ? (
