@@ -20,8 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 ffmpeg.setFfmpegPath(ffmpegPath);
+const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
+
+
 mongoose.connect("mongodb+srv://lokesh:lokeshcz@cluster0.dsoakmx.mongodb.net/AudioRecoding?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -94,10 +99,17 @@ app.get('/getTranscript/:filename', async (req, res) => {
         };
 
         const s3Object = await s3.getObject(s3Params).promise();
-        const tempFilePath = `temp_${filename}`;
+
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
+        const tempFilePath = `${tempDir}/temp_${filename}`;
+
         fs.writeFileSync(tempFilePath, s3Object.Body);
 
-        const outputFilePath = `converted_${filename}.wav`;
+        // const outputFilePath = `converted_${filename}.wav`;
+        const outputFilePath = `${tempDir}/converted_${filename}.wav`;
+
         await new Promise((resolve, reject) => {
             ffmpeg(tempFilePath)
                 .toFormat('wav')
@@ -118,7 +130,6 @@ app.get('/getTranscript/:filename', async (req, res) => {
 
         res.send({ transcript: transcription });
     } catch (error) {
-        console.error('Error fetching and transcribing audio:', error);
         res.status(500).send('Error fetching and transcribing audio.');
     }
 });
