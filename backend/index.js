@@ -24,7 +24,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 ffmpeg.setFfmpegPath(ffmpegPath);
-const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
 
 
 mongoose.connect("mongodb+srv://lokesh:lokeshcz@cluster0.dsoakmx.mongodb.net/AudioRecoding?retryWrites=true&w=majority&appName=Cluster0", {
@@ -89,6 +88,10 @@ app.get('/getRecording', async (req, res) => {
         res.status(500).send('Error fetching recordings.');
     }
 });
+ffmpeg.setFfmpegPath(ffmpegPath);
+
+// Specify a writable directory for temporary files
+const tempDir = '/path/to/temp/dir'; // Update this with a writable directory
 
 app.get('/getTranscript/:filename', async (req, res) => {
     const filename = req.params.filename;
@@ -100,16 +103,15 @@ app.get('/getTranscript/:filename', async (req, res) => {
 
         const s3Object = await s3.getObject(s3Params).promise();
 
+        // Create temporary directory if it doesn't exist
         if (!fs.existsSync(tempDir)) {
             fs.mkdirSync(tempDir, { recursive: true });
         }
-        const tempFilePath = `${tempDir}/temp_${filename}`;
 
+        const tempFilePath = `${tempDir}/temp_${filename}`;
         fs.writeFileSync(tempFilePath, s3Object.Body);
 
-        // const outputFilePath = `converted_${filename}.wav`;
         const outputFilePath = `${tempDir}/converted_${filename}.wav`;
-
         await new Promise((resolve, reject) => {
             ffmpeg(tempFilePath)
                 .toFormat('wav')
@@ -125,11 +127,13 @@ app.get('/getTranscript/:filename', async (req, res) => {
             response_format: "text"
         });
 
+        // Clean up temporary files
         fs.unlinkSync(tempFilePath);
         fs.unlinkSync(outputFilePath);
 
         res.send({ transcript: transcription });
     } catch (error) {
+        console.error('Error fetching and transcribing audio:', error);
         res.status(500).send('Error fetching and transcribing audio.');
     }
 });
