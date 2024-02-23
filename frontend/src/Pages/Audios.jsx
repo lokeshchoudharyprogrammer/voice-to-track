@@ -36,7 +36,7 @@ export const Audios = () => {
     }
   };
   const getTranscript = (filename) => {
-    fetch(`http://localhost:5000/getTranscript/${filename}`).then((res) => {
+    fetch(`https://calm-cyan-rattlesnake-hose.cyclic.app/getTranscript/${filename}`).then((res) => {
       return res.json()
     }).then((res) => {
       settranscript(res.transcript)
