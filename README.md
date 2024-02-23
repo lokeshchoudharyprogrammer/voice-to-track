@@ -17,6 +17,13 @@ Make sure you have the following installed:
 - Aws-sdk
 - ffmpeg (for audio conversion)
 
+## Client
+The client folder contains all of the frontend code for our web application. It was built using React and Chakra Ui.
+
+- Chakra Ui
+- React
+- React-icons
+
 ## Installation
 
 1. Clone the repository:
@@ -62,44 +69,6 @@ Make sure you have the following installed:
 - `dotenv`: Load environment variables from a `.env` file
 - `ffmpeg-static`: Static ffmpeg binaries for easy installation
 
-## API Endpoints
-
-### POST /upload
-
-- Description: Uploads an audio file to the server.
-- Request Body: Form-data with a field named `audio` containing the audio file.
-- Response: JSON object with a message and the location of the uploaded file.
-
-### GET /getTranscript/:filename
-
-- Description: Retrieves the transcript of an uploaded audio file.
-- Parameters:
-  - `filename`: The filename of the audio file.
-- Response: JSON object with the transcript text.
-
-### GET /getAllAudio
-
-- Description: Retrieves a list of all uploaded audio files.
-- Response: JSON array of filenames.
-
-## Example Usage
-
-1. Upload an audio file:
-
-   ```bash
-   curl -X POST -F "audio=@path/to/audiofile.mp3" http://localhost:5000/upload
-   ```
-
-2. Get transcript for an audio file:
-
-   ```bash
-   curl http://localhost:5000/getTranscript/filename.mp3
-   ```
-
-3. Get a list of all uploaded audio files:
-   ```bash
-   curl http://localhost:5000/getAllAudio
-   ```
 
 ## Notes
 
