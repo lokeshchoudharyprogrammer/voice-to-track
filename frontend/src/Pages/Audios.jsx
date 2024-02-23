@@ -4,17 +4,18 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  ModalBody, Spinner,
+  ModalCloseButton, Spacer
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
+import { FaCloudDownloadAlt } from "react-icons/fa";
 
 export const Audios = () => {
   const [audioFiles, setAudioFiles] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [transcript, settranscript] = useState("");
   const [showTranscript, setShowTranscript] = useState(true);
-
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     fetchAudioFiles();
     const timer = setTimeout(() => {
@@ -25,10 +26,12 @@ export const Audios = () => {
 
   const fetchAudioFiles = async () => {
     try {
-      const response = await fetch('http://localhost:5000/getAllAudio');
+      const response = await fetch('https://calm-cyan-rattlesnake-hose.cyclic.app/getAllAudio');
       const data = await response.json();
       setAudioFiles(data);
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.error('Error fetching audio files:', error);
     }
   };
@@ -50,26 +53,38 @@ export const Audios = () => {
             display: "flex", gap: "12px", padding: "12px"
           }}>
             {filename}
-            <Button onClick={() => { getTranscript(filename); onOpen(); }} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'> Get Transcript </Button>
-
+            {/* <Button disabled={true} onClick={() => { getTranscript(filename); onOpen(); }} style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'> Get Transcript </Button> */}
+            <a href={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} download="audio.mp3">
+              <Button style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'>
+                <FaCloudDownloadAlt />
+              </Button>
+            </a>
           </span>
           <audio controls>
-            <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/ogg" />
-            <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/mpeg" />
+            <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/ogg" />
+            <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/mpeg" />
           </audio>
+
         </div>
       )) : <div>Not Data Found </div>
   };
-
+  if (loading) {
+    return <div><Spinner
+      thickness='4px'
+      speed='0.65s'
+      emptyColor='gray.200'
+      color='blue.500'
+      size='xl'
+    /></div>
+  }
 
   return (
     <>
 
       <Heading textAlign={"center"}>Recorded Voice's</Heading>
-      <br />
-      <br />
-      <br />
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px", width: "98%", flexWrap: "wrap" }}>
+      <Spacer />
+      <Spacer />
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px", width: "98%", flexWrap: "wrap", marginTop: "45px" }}>
 
 
         {renderAudioPlayers()}
@@ -98,6 +113,8 @@ export const Audios = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <Spacer />
+      <Spacer />
     </>
   )
 }

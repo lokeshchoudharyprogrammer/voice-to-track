@@ -1,14 +1,13 @@
 
 import { useEffect, useRef, useState } from "react";
-
-import { Box, Button, useToast } from '@chakra-ui/react'
+import { Box, Button, Spacer, useToast } from '@chakra-ui/react'
 import staticicons from '../icons/icons8-audio-wave-100.png'
 import { VscDebugStart } from "react-icons/vsc";
 import { RiStopCircleLine } from "react-icons/ri";
 import { MdMotionPhotosPaused } from "react-icons/md";
 import { GrResume } from "react-icons/gr";
 import { IoCloudUpload } from "react-icons/io5";
-import icons from '../icons/icons8-audio-wave.gif'
+import icons from '../icons/Sound Beat.gif'
 export default function RecordUi({
   time,
   stop,
@@ -47,8 +46,8 @@ export default function RecordUi({
 
     const formData = new FormData();
     formData.append('audio', data.blob, 'recording.wav');
-    
-    const response = await fetch('http://localhost:5000/upload', {
+
+    const response = await fetch('https://calm-cyan-rattlesnake-hose.cyclic.app/upload', {
       method: 'POST',
       body: formData,
       mode: 'cors'
@@ -81,8 +80,7 @@ export default function RecordUi({
         position: "top-right"
       })
     }
-
-
+    window.location.reload();
   };
 
 
@@ -90,7 +88,8 @@ export default function RecordUi({
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px" }}>
+    <Spacer />
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px" ,marginTop: "45px",marginBottom: "45px"}}>
         <button
           type="button"
           onClick={() => {
@@ -116,18 +115,16 @@ export default function RecordUi({
           }
         </button>
 
-        {recording === true && recording === false ? (
+        {hasRecording === false ? (
           <div>
-            <img src={icons} alt='sound' />
+            <img src={icons} alt='sound' width="60px" />
           </div>
         ) : (
-          null
-        )}
-        {audioRef.current?.paused ? (
           <div>
             <img src={staticicons} alt='sound' />
           </div>
-        ) : null}
+        )}
+
 
 
 
@@ -168,6 +165,7 @@ export default function RecordUi({
             : null
         }
       </div>
+      <Spacer />
     </>
   );
 }
