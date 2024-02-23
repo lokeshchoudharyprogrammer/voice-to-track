@@ -47,8 +47,7 @@ export default function RecordUi({
 
     const formData = new FormData();
     formData.append('audio', data.blob, 'recording.wav');
-
-
+    
     const response = await fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData,
