@@ -42,12 +42,12 @@ export default function RecordUi({
       return;
     }
 
-   
+
 
     const formData = new FormData();
     formData.append('audio', data.blob, 'recording.wav');
 
-    const response = await fetch('https://calm-cyan-rattlesnake-hose.cyclic.app/upload', {
+    const response = await fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData,
       mode: 'cors'
@@ -55,7 +55,7 @@ export default function RecordUi({
 
     if (!response.ok) {
       const errorMessage = await response.text();
-   
+
       return;
     }
 
@@ -87,8 +87,8 @@ export default function RecordUi({
 
   return (
     <>
-    <Spacer />
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px" ,marginTop: "45px",marginBottom: "45px"}}>
+      <Spacer />
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px", marginTop: "45px", marginBottom: "45px" }}>
         <button
           type="button"
           onClick={() => {

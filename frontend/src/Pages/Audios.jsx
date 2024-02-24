@@ -26,7 +26,7 @@ export const Audios = () => {
 
   const fetchAudioFiles = async () => {
     try {
-      const response = await fetch('https://calm-cyan-rattlesnake-hose.cyclic.app/getAllAudio');
+      const response = await fetch('http://localhost:5000/getAllAudio');
       const data = await response.json();
       setAudioFiles(data);
       setLoading(false)
@@ -36,7 +36,7 @@ export const Audios = () => {
     }
   };
   const getTranscript = (filename) => {
-    fetch(`https://calm-cyan-rattlesnake-hose.cyclic.app/getTranscript/${filename}`).then((res) => {
+    fetch(`http://localhost:5000/getTranscript/${filename}`).then((res) => {
       return res.json()
     }).then((res) => {
       settranscript(res.transcript)
@@ -48,22 +48,22 @@ export const Audios = () => {
   const renderAudioPlayers = () => {
 
     return audioFiles.length > 0 ?
-      audioFiles && audioFiles.map((filename, index) => (
-        <div key={index} style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding: "12px", borderRadius: "12px", border: "2px solid " }}>
+      audioFiles && audioFiles.reverse().map((filename, index) => (
+        <div key={index} style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px", padding: "5px", borderRadius: "12px", border: "2px solid " }}>
           <span style={{
-            display: "flex", gap: "12px", padding: "12px"
+            display: "flex", gap: "5px", padding: "12px"
           }}>
-            {filename}
-            <Button  onClick={() => { getTranscript(filename); onOpen(); }}  colorScheme='blue'> Get Transcript </Button> 
-            <a href={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} download="audio.mp3">
+            {filename.slice(1, filename.length - 8)}
+            <Button onClick={() => { getTranscript(filename); onOpen(); }} colorScheme='blue'> Get Transcript </Button>
+            <a href={`http://localhost:5000/getAudio/${filename}`} download="audio.mp3">
               <Button style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "13px" }} colorScheme='blue'>
                 <FaCloudDownloadAlt />
               </Button>
             </a>
           </span>
           <audio controls>
-            <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/ogg" />
-            <source src={`https://calm-cyan-rattlesnake-hose.cyclic.app/getAudio/${filename}`} type="audio/mpeg" />
+            <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/ogg" />
+            <source src={`http://localhost:5000/getAudio/${filename}`} type="audio/mpeg" />
           </audio>
 
         </div>
@@ -85,7 +85,7 @@ export const Audios = () => {
       <Heading textAlign={"center"}>Recorded Voice's</Heading>
       <Spacer />
       <Spacer />
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px", width: "98%", flexWrap: "wrap", marginTop: "45px" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "23px", width: "98%", flexWrap: "wrap", marginTop: "45px", margin: "auto" }}>
 
 
         {renderAudioPlayers()}
