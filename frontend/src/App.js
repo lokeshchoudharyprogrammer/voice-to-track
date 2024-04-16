@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import Recorder from "voice-recorder-react";
 import RecordUi from "./Pages/RecordUi";
 import { Audios } from "./Pages/Audios";
@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       <NavBar />
-      <div style={{ display: "flex", alignItems: "center", flexDirection: "column", marginTop: "45px" }}>
+      <div style={{ display: "flex", alignItems: "center", flexDirection: "column", marginTop: "55px" }}>
         <Heading>Record Your Voice </Heading>
         <Spacer />
         <Spacer />
